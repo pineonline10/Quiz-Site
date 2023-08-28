@@ -106,6 +106,16 @@ function endQuiz() {
     scoreContainer.style.display = "block";
     finalScoreEl.textContent = timeLeft;
 }
+const restartBtn = document.getElementById("restartBtn");
 
+function restartQuiz() {
+    currentQuestionIndex = 0;
+    timeLeft = 60;
+    timerEl.textContent = timeLeft;
+    scoreContainer.style.display = "none";
+    startQuiz();
+}
+
+restartBtn.addEventListener("click", restartQuiz);
 startBtn.addEventListener("click", startQuiz);
 submitBtn.addEventListener("click", saveScore);
