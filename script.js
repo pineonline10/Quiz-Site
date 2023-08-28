@@ -9,23 +9,26 @@ const initialsInput = document.getElementById("initials");
 const submitBtn = document.getElementById("submitBtn");
 
 const quizData = [
-    // Add your quiz questions and answers here
     {
-        question: "What is the capital of France?",
-        options: ["London", "Paris", "Berlin", "Madrid"],
+        question: "What is the square root of 81?",
+        options: ["7", "9", "orange", "13"],
         answer: 1
     },
     {
-        question: "Which planet is known as the Red Planet?",
-        options: ["Mars", "Earth", "Venus", "Jupiter"],
+        question: "What is the best video game of the last decade?",
+        options: ["Baldur's Gate 3", "Roblox", "Assassin's Creed", "Destiny"],
         answer: 0
     },
     {
-        question: "In which year did World War II end?",
-        options: ["1941", "1945", "1939", "1950"],
-        answer: 1
+        question: "Where does the Muffin Man live?",
+        options: ["221B Baker Street", "Rancho Cucamonga", "Pleasantville", "Drury Lane"],
+        answer: 3
     },
-    // Add more questions as needed
+    {
+        question: "What is the longest recorded flight of a chicken?",
+        options: ["10 secs", "3 mins", "13 secs", "some say he's still up there"],
+        answer: 2
+    }
 ];
 
 let currentQuestionIndex = 0;
@@ -49,7 +52,6 @@ function updateTimer() {
 }
 
 function loadQuestion() {
-    // Load and display question logic
     const currentQuestion = quizData[currentQuestionIndex];
     questionEl.textContent = currentQuestion.question;
 
@@ -61,24 +63,29 @@ function loadQuestion() {
         optionsEl.appendChild(optionBtn);
     });
 
-    resultEl.textContent = ""; // Clear any previous result messages
+    resultEl.textContent = ""; 
     nextBtn.style.display = "none";
 }
 
 function checkAnswer(selectedIndex) {
-    // Check answer logic
     const currentQuestion = quizData[currentQuestionIndex];
     if (selectedIndex === currentQuestion.answer) {
         resultEl.textContent = "Correct!";
     } else {
         resultEl.textContent = "Wrong! -10 seconds";
-        timeLeft -= 10; // Subtract 10 seconds for incorrect answer
+        timeLeft -= 10;
         if (timeLeft < 0) {
             timeLeft = 0;
         }
-        timerElement.textContent = timeLeft;
+        timerEl.textContent = timeLeft;
     }
-    nextBtn.style.display = "block";
+
+    currentQuestionIndex++;
+    if (currentQuestionIndex < quizData.length) {
+        loadQuestion();
+    } else {
+        endQuiz();
+    }
 }
 function saveScore() {
     const initials = initialsInput.value.trim();
@@ -87,14 +94,17 @@ function saveScore() {
         scores.push({ initials, score: timeLeft });
         localStorage.setItem("scores", JSON.stringify(scores));
 
-        // Display high scores (optional)
-        // const highScoresList = document.getElementById("high-scores-list");
-        // highScoresList.innerHTML = scores.map(score => `<li>${score.initials}: ${score.score}</li>`).join("");
+    const highScoresList = document.getElementById("high-scores-list");
+    highScoresList.innerHTML = scores.map(score => `<li>${score.initials}: ${score.score}</li>`).join("");
     }
 }
 
 function endQuiz() {
-    // End quiz logic
+    clearInterval(timerInterval);
+    questionEl.textContent = "Quiz Over!";
+    optionsEl.innerHTML = "";
+    scoreContainer.style.display = "block";
+    finalScoreEl.textContent = timeLeft;
 }
 
 startBtn.addEventListener("click", startQuiz);
