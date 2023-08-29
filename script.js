@@ -65,7 +65,7 @@ function loadQuestion() {
     });
 
     resultEl.textContent = ""; 
-    nextBtn.style.display = "none";
+    //nextBtn.style.display = "none";
 }
 
 function checkAnswer(selectedIndex) {
@@ -100,9 +100,9 @@ function saveScore() {
         localStorage.setItem("previousScore", JSON.stringify(timeLeft));
 }
 function displayHighScores(scores) {
-    const highScoresList = document.getElementById("high-scores-list");
+    const highScoresList = document.getElementById("score-container");
     highScoresList.innerHTML = ""; 
-}
+
     scores.forEach(score => {
         const listItem = document.createElement("li");
         listItem.textContent = score.initials + ": " + score.score;
@@ -110,7 +110,7 @@ function displayHighScores(scores) {
     });
     scoreContainer.style.display = "block";
 }
-    
+} 
 
 function endQuiz() {
     clearInterval(timerInterval);
