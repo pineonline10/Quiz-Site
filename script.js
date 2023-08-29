@@ -7,6 +7,7 @@ const scoreContainer = document.getElementById("score-container");
 const finalScoreEl = document.getElementById("final-score");
 const initialsInput = document.getElementById("initials");
 const submitBtn = document.getElementById("submitBtn");
+const restartBtn = document.getElementById("restartBtn");
 
 const quizData = [
     {
@@ -94,10 +95,22 @@ function saveScore() {
         scores.push({ initials, score: timeLeft });
         localStorage.setItem("scores", JSON.stringify(scores));
 
-    const highScoresList = document.getElementById("high-scores-list");
-    highScoresList.innerHTML = scores.map(score => `<li>${score.initials}: ${score.score}</li>`).join("");
-    }
+        displayHighScores(scores);
+
+        localStorage.setItem("previousScore", JSON.stringify(timeLeft));
 }
+function displayHighScores(scores) {
+    const highScoresList = document.getElementById("high-scores-list");
+    highScoresList.innerHTML = ""; 
+}
+    scores.forEach(score => {
+        const listItem = document.createElement("li");
+        listItem.textContent = score.initials + ": " + score.score;
+        highScoresList.appendChild(listItem);
+    });
+    scoreContainer.style.display = "block";
+}
+    
 
 function endQuiz() {
     clearInterval(timerInterval);
@@ -106,7 +119,6 @@ function endQuiz() {
     scoreContainer.style.display = "block";
     finalScoreEl.textContent = timeLeft;
 }
-const restartBtn = document.getElementById("restartBtn");
 
 function restartQuiz() {
     currentQuestionIndex = 0;
@@ -116,6 +128,14 @@ function restartQuiz() {
     startQuiz();
 }
 
-restartBtn.addEventListener("click", restartQuiz);
+const previousScore = JSON.parse(localStorage.getItem("previousScore")) || null;
+if (previousScore !== null) {
+    const previousScoreDisplay = document.getElementById("previous-score");
+    previousScoreDisplay.textContent = "Previous Score " + previousScore;
+   previousScoreDisplay.style.display = "block"; 
+}
+
+restartBtn.addEventListener("click",
+restartQuiz);
 startBtn.addEventListener("click", startQuiz);
 submitBtn.addEventListener("click", saveScore);
